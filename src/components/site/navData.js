@@ -1,3 +1,6 @@
+// Existing customers sign in to the Jago application, which stays on jago-tech.ai.
+export const SIGN_IN_URL = "https://www.jago-tech.ai/sign-in";
+
 export const NAV_ITEMS = [
   {
     type: "mega",
