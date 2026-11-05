@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Logo from "@/components/site/Logo";
-import { NAV_ITEMS } from "@/components/site/navData";
+import { NAV_ITEMS, SIGN_IN_URL } from "@/components/site/navData";
 
 // Menu panels load on demand, off the critical path.
 const NavPanel = lazy(() => import("@/components/site/NavPanels"));
@@ -203,6 +203,9 @@ export default function Navbar({ logoVariant }) {
             );
           })}
 
+          <a href={SIGN_IN_URL} className="site-cta-secondary px-4 py-2 text-sm rounded-lg">
+            Sign in
+          </a>
           <Link to={cta.to} className="site-cta-primary px-4 py-2 text-sm rounded-lg">
             {cta.label}
           </Link>
@@ -327,7 +330,14 @@ export default function Navbar({ logoVariant }) {
               })}
             </div>
 
-            <div className="shrink-0 border-t border-border p-5">
+            <div className="shrink-0 border-t border-border p-5 space-y-3">
+              <a
+                href={SIGN_IN_URL}
+                onClick={closeDrawer}
+                className="site-cta-secondary w-full px-4 py-3 text-sm rounded-lg"
+              >
+                Sign in
+              </a>
               <Link
                 to={cta.to}
                 onClick={closeDrawer}

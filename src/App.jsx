@@ -12,8 +12,9 @@ import StickyCta from './components/site/StickyCta';
 import Home from '@/pages/Home';
 // Add page imports here
 
-// Self-hosted build (Cloudflare): no Base44 login or app-settings check; the site is public only.
-const SELF_HOSTED = Boolean(import.meta.env.VITE_LEAD_ENDPOINT);
+// Self-hosted build (VITE_BACKEND_ENDPOINT set, e.g. on AWS Amplify): no Base44 login or
+// app-settings check; the site is public only.
+const SELF_HOSTED = Boolean(import.meta.env.VITE_BACKEND_ENDPOINT);
 const useAuthState = SELF_HOSTED ? () => ({}) : useAuth;
 const AuthShell = SELF_HOSTED ? Fragment : AuthProvider;
 
