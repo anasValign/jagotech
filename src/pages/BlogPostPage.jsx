@@ -4,6 +4,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import usePageMeta from "@/hooks/usePageMeta";
 import Navbar from "@/components/site/Navbar";
+import Accordion from "@/components/site/Accordion";
 import CTA from "@/components/site/CTA";
 import Footer from "@/components/site/Footer";
 import PageNotFound from "@/lib/PageNotFound";
@@ -45,6 +46,28 @@ const getHeadings = (body) =>
     .map((l) => l.slice(3).replace(/\*\*/g, "").trim())
     .map((text) => ({ text, id: slugify(text) }));
 
+// Pulls the "## FAQ" section out of a post so its questions can show as a dropdown list.
+// Each "### Question" becomes one item; the text under it is the answer.
+const splitFaq = (body) => {
+  const lines = body.split("\n");
+  const start = lines.findIndex((l) => /^##\s+(FAQs?|Frequently asked questions)\s*$/i.test(l));
+  if (start === -1) return { before: body, faqs: [], after: "" };
+  let end = lines.findIndex((l, i) => i > start && l.startsWith("## "));
+  if (end === -1) end = lines.length;
+  const faqs = [];
+  lines.slice(start + 1, end).forEach((l) => {
+    if (l.startsWith("### ")) faqs.push({ q: l.slice(4).trim(), a: [] });
+    else if (faqs.length) faqs[faqs.length - 1].a.push(l);
+  });
+  if (!faqs.length) return { before: body, faqs: [], after: "" };
+  return {
+    before: lines.slice(0, start).join("\n"),
+    heading: lines[start].slice(3).trim(),
+    faqs: faqs.map((f) => ({ q: f.q, a: f.a.join("\n").trim() })),
+    after: lines.slice(end).join("\n"),
+  };
+};
+
 const markdownComponents = {
   a: MarkdownLink,
   h2: ({ children }) => <h2 id={slugify(textOf(children))}>{children}</h2>,
@@ -59,6 +82,7 @@ const markdownComponents = {
 function BlogPost({ post }) {
   usePageMeta(`${post.seoTitle || post.title} | Jago AI`, post.excerpt);
   const toc = getHeadings(post.body);
+  const sections = splitFaq(post.body);
   const more = getAllPosts()
     .filter((p) => p.slug !== post.slug)
     .slice(0, 3);
@@ -93,8 +117,29 @@ function BlogPost({ post }) {
 
               <div className="blog-prose mt-8">
                 <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-                  {post.body}
+                  {sections.before}
                 </ReactMarkdown>
+                {sections.faqs.length > 0 && (
+                  <>
+                    <h2 id={slugify(sections.heading)}>{sections.heading}</h2>
+                    <Accordion
+                      className="blog-faq"
+                      firstOpen={false}
+                      items={sections.faqs.map((f) => ({
+                        key: f.q,
+                        title: f.q,
+                        body: (
+                          <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+                            {f.a}
+                          </ReactMarkdown>
+                        ),
+                      }))}
+                    />
+                    <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+                      {sections.after}
+                    </ReactMarkdown>
+                  </>
+                )}
               </div>
             </div>
 
