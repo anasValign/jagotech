@@ -520,3 +520,7 @@ body { font-variant-numeric: lining-nums; }
 .blog-table tbody tr:nth-child(even) td { background: rgba(19, 22, 27, 0.45); }
 .blog-table th, .blog-table td { min-width: 9rem; }
 .blog-prose h2 { scroll-margin-top: 6rem; }
+/* Blog FAQ dropdowns: a divider between questions, answers keep article text styles. */
+.blog-prose .blog-faq { margin-top: 0.75rem; border-top: 1px solid #2f3641; }
+.blog-prose .blog-faq > div { border-bottom: 1px solid #2f3641; }
+.blog-prose .blog-faq > div > div > * + * { margin-top: 0.75rem; }
