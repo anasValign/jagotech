@@ -26,8 +26,28 @@ const MarkdownLink = ({ href = "", children }) =>
     </a>
   );
 
+// Section headings get ids so the "On this page" list can link to them.
+const slugify = (text) =>
+  text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
+const textOf = (children) =>
+  React.Children.toArray(children)
+    .map((c) => (typeof c === "string" ? c : textOf(c?.props?.children)))
+    .join("");
+
+const getHeadings = (body) =>
+  body
+    .split("\n")
+    .filter((l) => l.startsWith("## "))
+    .map((l) => l.slice(3).replace(/\*\*/g, "").trim())
+    .map((text) => ({ text, id: slugify(text) }));
+
 const markdownComponents = {
   a: MarkdownLink,
+  h2: ({ children }) => <h2 id={slugify(textOf(children))}>{children}</h2>,
   img: ({ src, alt }) => <img src={src} alt={alt || ""} loading="lazy" decoding="async" />,
   table: ({ children }) => (
     <div className="blog-table">
@@ -38,6 +58,7 @@ const markdownComponents = {
 
 function BlogPost({ post }) {
   usePageMeta(`${post.seoTitle || post.title} | Jago AI`, post.excerpt);
+  const toc = getHeadings(post.body);
   const more = getAllPosts()
     .filter((p) => p.slug !== post.slug)
     .slice(0, 3);
@@ -47,35 +68,66 @@ function BlogPost({ post }) {
       <Navbar />
       <main id="main-content">
         <article className="pt-10 pb-16 sm:pt-14 sm:pb-20">
-          <div className="mx-auto max-w-3xl px-5 sm:px-8">
-            <Link
-              to="/blog"
-              className="site-inline-link text-sm font-semibold text-muted-foreground hover:text-foreground"
-            >
-              <span aria-hidden="true">←</span>&nbsp;All posts
-            </Link>
-            <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
-              {post.category && <span className="font-semibold text-primary">{post.category}</span>}
-              <time dateTime={post.date}>{formatPostDate(post.date)}</time>
-              <span aria-hidden="true">·</span>
-              <span>{readingMinutes(post.body)} min read</span>
+          <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:grid lg:grid-cols-[minmax(0,52rem)_16rem] lg:justify-between lg:gap-12">
+            <div className="min-w-0">
+              <Link
+                to="/blog"
+                className="site-inline-link text-sm font-semibold text-muted-foreground hover:text-foreground"
+              >
+                <span aria-hidden="true">←</span>&nbsp;All posts
+              </Link>
+              <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
+                {post.category && <span className="font-semibold text-primary">{post.category}</span>}
+                <time dateTime={post.date}>{formatPostDate(post.date)}</time>
+                <span aria-hidden="true">·</span>
+                <span>{readingMinutes(post.body)} min read</span>
+              </div>
+              <h1 className="mt-3 font-heading text-balance">{post.title}</h1>
+              {post.author && <p className="mt-4 !text-base text-muted-foreground">By {post.author}</p>}
+
+              <img
+                src={post.thumbnail}
+                alt={post.thumbnailAlt || ""}
+                className="mt-8 aspect-[16/9] w-full rounded-2xl border border-[#2f3641] object-cover"
+              />
+
+              <div className="blog-prose mt-8">
+                <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+                  {post.body}
+                </ReactMarkdown>
+              </div>
             </div>
-            <h1 className="mt-3 font-heading text-balance">{post.title}</h1>
-            {post.author && <p className="mt-4 !text-base text-muted-foreground">By {post.author}</p>}
-          </div>
 
-          <div className="mx-auto mt-8 max-w-5xl px-5 sm:px-8">
-            <img
-              src={post.thumbnail}
-              alt={post.thumbnailAlt || ""}
-              className="aspect-[16/9] w-full rounded-2xl border border-[#2f3641] object-cover"
-            />
-          </div>
-
-          <div className="blog-prose mx-auto mt-8 max-w-3xl px-5 sm:px-8">
-            <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-              {post.body}
-            </ReactMarkdown>
+            <aside className="hidden lg:block" aria-label="Article tools">
+              <div className="sticky top-24 space-y-6">
+                {toc.length > 1 && (
+                  <nav aria-label="On this page" className="rounded-2xl border border-[#2f3641] bg-[rgba(19,22,27,0.3)] p-5">
+                    <p className="!text-sm font-semibold text-foreground">On this page</p>
+                    <ul className="mt-3 space-y-1">
+                      {toc.map((h) => (
+                        <li key={h.id}>
+                          <a
+                            href={`#${h.id}`}
+                            className="block py-1 text-sm leading-snug text-muted-foreground hover:text-primary transition-colors"
+                          >
+                            {h.text}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </nav>
+                )}
+                <div className="rounded-2xl border border-[#2f3641] bg-[rgba(19,22,27,0.3)] p-5">
+                  <p className="!text-base font-semibold text-foreground">Put AI to work in 8 weeks</p>
+                  <p className="mt-2 !text-sm text-muted-foreground">
+                    See how Jago runs governed AI agents across your teams.
+                  </p>
+                  <Link to="/contact?intent=trial" className="site-cta-primary mt-4 w-full px-4 py-2.5 text-sm rounded-lg">
+                    Book a free trial
+                  </Link>
+                </div>
+              </div>
+            </aside>
           </div>
         </article>
 
