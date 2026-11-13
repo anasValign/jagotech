@@ -39,4 +39,9 @@ export const NAV_ITEMS = [
   { type: "link", label: "Marketplace", href: "/marketplace" },
   { type: "link", label: "Customers", href: "/customers" },
   { type: "link", label: "Pricing", href: "/pricing" },
+  {
+    type: "dropdown",
+    label: "Resources",
+    links: [{ label: "Blogs", href: "/blog" }],
+  },
 ];

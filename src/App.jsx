@@ -33,6 +33,8 @@ const IndustriesPage = lazy(() => import('@/pages/IndustriesPage'));
 const PrivacyPage = lazy(() => import('@/pages/PrivacyPage'));
 const TermsPage = lazy(() => import('@/pages/TermsPage'));
 const RefundPage = lazy(() => import('@/pages/RefundPage'));
+const BlogListPage = lazy(() => import('@/pages/BlogListPage'));
+const BlogPostPage = lazy(() => import('@/pages/BlogPostPage'));
 
 const PageFallback = () => (
   <div className="fixed inset-0 flex items-center justify-center">
@@ -72,7 +74,9 @@ const AuthenticatedApp = () => {
       <Route path="/marketplace" element={<Suspense fallback={<PageFallback />}><MarketplacePage /></Suspense>} />
       <Route path="/platform" element={<Suspense fallback={<PageFallback />}><PlatformPage /></Suspense>} />
       <Route path="/solutions" element={<Suspense fallback={<PageFallback />}><SolutionsPage /></Suspense>} />
-      <Route path="/resources" element={<Navigate to="/" replace />} />
+      <Route path="/resources" element={<Navigate to="/blog" replace />} />
+      <Route path="/blog" element={<Suspense fallback={<PageFallback />}><BlogListPage /></Suspense>} />
+      <Route path="/blog/:slug" element={<Suspense fallback={<PageFallback />}><BlogPostPage /></Suspense>} />
       <Route path="/compliance" element={<Suspense fallback={<PageFallback />}><CompliancePage /></Suspense>} />
       <Route path="/customers" element={<Suspense fallback={<PageFallback />}><CustomersPage /></Suspense>} />
       <Route path="/security" element={<Suspense fallback={<PageFallback />}><SecurityPage /></Suspense>} />
