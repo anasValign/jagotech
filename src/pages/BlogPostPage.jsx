@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import usePageMeta from "@/hooks/usePageMeta";
 import Navbar from "@/components/site/Navbar";
 import CTA from "@/components/site/CTA";
@@ -27,19 +28,16 @@ const MarkdownLink = ({ href = "", children }) =>
 
 const markdownComponents = {
   a: MarkdownLink,
-  h2: ({ children }) => <h2 className="mt-10 text-foreground">{children}</h2>,
-  h3: ({ children }) => <h3 className="mt-8 text-foreground">{children}</h3>,
-  p: ({ children }) => <p className="mt-4">{children}</p>,
-  ul: ({ children }) => <ul className="mt-4 list-disc space-y-2 pl-6 text-lg text-[#DDE4EE]">{children}</ul>,
-  ol: ({ children }) => <ol className="mt-4 list-decimal space-y-2 pl-6 text-lg text-[#DDE4EE]">{children}</ol>,
-  blockquote: ({ children }) => (
-    <blockquote className="mt-6 border-l-2 border-primary pl-5 italic">{children}</blockquote>
+  img: ({ src, alt }) => <img src={src} alt={alt || ""} loading="lazy" decoding="async" />,
+  table: ({ children }) => (
+    <div className="blog-table">
+      <table>{children}</table>
+    </div>
   ),
-  img: ({ src, alt }) => <img src={src} alt={alt || ""} loading="lazy" className="mt-6 w-full rounded-xl" />,
 };
 
 function BlogPost({ post }) {
-  usePageMeta(`${post.title} | Jago AI blog`, post.excerpt);
+  usePageMeta(`${post.seoTitle || post.title} | Jago AI`, post.excerpt);
   const more = getAllPosts()
     .filter((p) => p.slug !== post.slug)
     .slice(0, 3);
@@ -74,8 +72,10 @@ function BlogPost({ post }) {
             />
           </div>
 
-          <div className="mx-auto mt-6 max-w-3xl px-5 sm:px-8">
-            <ReactMarkdown components={markdownComponents}>{post.body}</ReactMarkdown>
+          <div className="blog-prose mx-auto mt-8 max-w-3xl px-5 sm:px-8">
+            <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+              {post.body}
+            </ReactMarkdown>
           </div>
         </article>
 

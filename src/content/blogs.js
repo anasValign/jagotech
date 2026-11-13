@@ -1,105 +1,93 @@
-// Blog posts. To publish a new post, add an object to BLOG_POSTS:
-// - slug: the URL, e.g. "my-post" becomes /blog/my-post (lowercase, hyphens, unique)
-// - date: the created date as "YYYY-MM-DD"; the blog page lists newest first
-// - thumbnail: an image path under /public (e.g. "/blog/my-post.jpg") or a full image URL
-// - body: the article in Markdown (## headings, lists, **bold**, [links](/pricing))
+// Blog posts. To publish a new post:
+// 1. Write the article in Markdown at src/content/blog/<slug>.md
+//    (## headings, lists, tables, **bold**, [links](/pricing), ![alt](/blog/<slug>/image.webp)).
+// 2. Put its images, including cover.webp (the thumbnail), in public/blog/<slug>/.
+// 3. Import the file below and add an entry to BLOG_POSTS:
+//    - slug: the URL, e.g. "my-post" becomes /blog/my-post (lowercase, hyphens, unique)
+//    - date: the created date as "YYYY-MM-DD"; the blog page lists newest first
+//      (posts with the same date keep the order they have in this list)
+//    - seoTitle / excerpt: the browser tab title and meta description
+// 4. Add the URL to public/sitemap.xml.
+
+import topEnterpriseAgenticAiVendors from "./blog/top-enterprise-agentic-ai-vendors.md?raw";
+import whatIsEnterpriseAgenticAiPlatform from "./blog/what-is-enterprise-agentic-ai-platform.md?raw";
+import aiAgentGovernanceGuide from "./blog/ai-agent-governance-guide.md?raw";
+import enterpriseAiAgentPlatformBuyersGuide from "./blog/enterprise-ai-agent-platform-buyers-guide.md?raw";
+import aiAgentsVsCopilotsVsChatbots from "./blog/ai-agents-vs-copilots-vs-chatbots.md?raw";
+import multiAgentOrchestrationExplained from "./blog/multi-agent-orchestration-explained.md?raw";
 
 export const BLOG_POSTS = [
   {
-    slug: "ai-across-your-company-in-8-weeks",
-    title: "How to put AI to work across your company in 8 weeks",
-    excerpt:
-      "A week-by-week look at how Jago goes from first data connection to agents your teams use every day.",
-    date: "2026-11-10",
+    slug: "top-enterprise-agentic-ai-vendors",
+    title: "Top Enterprise Agentic AI Vendors in 2026",
+    seoTitle: "Top Enterprise Agentic AI Vendors in 2026: Categories & Buyer Criteria",
+    excerpt: "Compare leading enterprise Agentic AI vendors by category, strengths, governance capabilities, and best-fit use cases. Includes a practical selection checklist.",
+    date: "2026-11-13",
     author: "Jago AI team",
-    category: "Playbook",
-    thumbnail: "/blog/eight-week-rollout.svg",
-    thumbnailAlt: "Eight steps rising toward a live AI platform",
-    body: `
-Most AI projects stall between the pilot and the rollout. The pilot works for one team, then the work of connecting more data, more people and more approvals never quite gets done.
-
-Jago is built to go live across your teams in 8 weeks. Here is how that time is spent.
-
-## Weeks 1 and 2: connect your data
-
-We connect the systems your teams already use and agree which questions matter most. Nothing is copied into a new tool for each use case.
-
-## Weeks 3 and 4: answer questions
-
-Teams start asking questions of their own data in plain language, typed or spoken, and check the answers against what they already know.
-
-## Weeks 5 and 6: explain and warn
-
-Jago starts explaining why numbers move and flagging risks before they turn into problems.
-
-## Weeks 7 and 8: run routine work
-
-Routine work moves to agents that act only after a person approves. By the end, every team has agents ready for its own roles.
-
-## Next step
-
-[Download the 8-week plan](/contact?intent=plan) to see the full schedule, or [book a free trial](/contact?intent=trial).
-`,
+    category: "Buyer’s guide",
+    thumbnail: "/blog/top-enterprise-agentic-ai-vendors/cover.webp",
+    thumbnailAlt: "Top enterprise agentic AI vendors in 2026: 5 categories, 10 vendors and a buyer’s checklist",
+    body: topEnterpriseAgenticAiVendors,
   },
   {
-    slug: "one-platform-not-more-pieces",
-    title: "Why buying AI in pieces holds companies back",
-    excerpt:
-      "A chatbot here, a dashboard tool there. Here is why separate AI tools stop short, and what one platform changes.",
-    date: "2026-10-28",
+    slug: "what-is-enterprise-agentic-ai-platform",
+    title: "What Is an Enterprise Agentic AI Platform?",
+    seoTitle: "What Is an Enterprise Agentic AI Platform? A Practical Guide",
+    excerpt: "Learn what an enterprise agentic AI platform is, how it works, its core components, governance requirements, and how to choose the right platform for your business.",
+    date: "2026-11-13",
     author: "Jago AI team",
-    category: "Perspective",
-    thumbnail: "/blog/one-platform.svg",
-    thumbnailAlt: "Four separate tools joining into one platform",
-    body: `
-Most organisations buy AI in pieces: a chatbot for documents, a dashboard tool for reports, a separate prediction vendor and an automation builder kit.
-
-Each piece works on its own. Together they cause three problems.
-
-## Data is copied again and again
-
-Every tool needs its own copy of your data, so each one drifts out of date in its own way.
-
-## Each tool stops at its edge
-
-The chatbot can't tell you why a number moved. The dashboard can't act on what it shows. People fill the gaps by hand.
-
-## Nobody owns the outcome
-
-With four vendors, no one is responsible for the result your business actually wanted.
-
-## One platform instead
-
-Jago answers questions from your data, explains why numbers move, warns of risks and runs routine work you approve, all from one place. [See how the platform works](/platform).
-`,
+    category: "Guide",
+    thumbnail: "/blog/what-is-enterprise-agentic-ai-platform/cover.webp",
+    thumbnailAlt: "What is an enterprise agentic AI platform? Agents, orchestration, enterprise data and integrations",
+    body: whatIsEnterpriseAgenticAiPlatform,
   },
   {
-    slug: "ranking-branches-by-risk",
-    title: "How a large lender decides which branches to audit first",
-    excerpt:
-      "With more than 1,000 branches, a lender used Jago to rank every branch by risk and focus its audits.",
-    date: "2026-10-14",
+    slug: "ai-agent-governance-guide",
+    title: "What Is AI Agent Governance? A Practical Enterprise Guide",
+    seoTitle: "What Is AI Agent Governance? A Practical Enterprise Guide",
+    excerpt: "Learn what AI agent governance is, why it matters, the controls enterprises need, and how to govern autonomous AI agents with approvals, audit trails, and least-privilege access.",
+    date: "2026-11-13",
     author: "Jago AI team",
-    category: "Customer story",
-    thumbnail: "/blog/branch-risk.svg",
-    thumbnailAlt: "A map of branches with the riskiest highlighted",
-    body: `
-When you have more than 1,000 branches across many regions, you can't audit them all at once. The question is where to look first.
-
-## The problem
-
-Audit teams were choosing branches by rotation and instinct. The signals that point to risk were spread across separate systems.
-
-## What changed
-
-Jago brought those signals together and ranked every branch by risk, with a plain explanation of why each one ranked where it did.
-
-## The result
-
-Auditors now start with the branches most likely to need attention, and can show why they chose them.
-
-[Read the full customer story](/customers).
-`,
+    category: "Governance",
+    thumbnail: "/blog/ai-agent-governance-guide/cover.webp",
+    thumbnailAlt: "What is AI agent governance? Approvals, audit trails and least-privilege access",
+    body: aiAgentGovernanceGuide,
+  },
+  {
+    slug: "enterprise-ai-agent-platform-buyers-guide",
+    title: "Enterprise AI Agent Platform Buyer’s Guide: 12 Questions to Ask Vendors",
+    seoTitle: "Enterprise AI Agent Platform Buyer’s Guide: 12 Questions to Ask",
+    excerpt: "Use this enterprise AI agent platform buyer’s guide to evaluate vendors on integrations, governance, security, orchestration, deployment, pricing, and time-to-value.",
+    date: "2026-11-13",
+    author: "Jago AI team",
+    category: "Buyer’s guide",
+    thumbnail: "/blog/enterprise-ai-agent-platform-buyers-guide/cover.webp",
+    thumbnailAlt: "Enterprise AI agent platform buyer’s guide: 12 questions to ask vendors",
+    body: enterpriseAiAgentPlatformBuyersGuide,
+  },
+  {
+    slug: "ai-agents-vs-copilots-vs-chatbots",
+    title: "AI Agents vs. Copilots vs. Chatbots: What Enterprises Actually Need",
+    seoTitle: "AI Agents vs. Copilots vs. Chatbots: What Enterprises Need",
+    excerpt: "Understand the differences between AI agents, copilots, and chatbots—and learn when each is the right choice for enterprise workflows, productivity, and automation.",
+    date: "2026-11-13",
+    author: "Jago AI team",
+    category: "Explainer",
+    thumbnail: "/blog/ai-agents-vs-copilots-vs-chatbots/cover.webp",
+    thumbnailAlt: "AI agents vs copilots vs chatbots",
+    body: aiAgentsVsCopilotsVsChatbots,
+  },
+  {
+    slug: "multi-agent-orchestration-explained",
+    title: "Multi-Agent Orchestration Explained: How Enterprises Coordinate AI Agents",
+    seoTitle: "Multi-Agent Orchestration Explained: How Enterprises Coordinate AI Agents",
+    excerpt: "Learn what multi-agent orchestration is, how it works, common orchestration patterns, governance requirements, and when enterprises should use multiple AI agents.",
+    date: "2026-11-13",
+    author: "Jago AI team",
+    category: "Explainer",
+    thumbnail: "/blog/multi-agent-orchestration-explained/cover.webp",
+    thumbnailAlt: "Multi-agent orchestration explained",
+    body: multiAgentOrchestrationExplained,
   },
 ];
 
